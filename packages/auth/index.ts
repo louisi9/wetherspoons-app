@@ -1,11 +1,11 @@
-import Discord from "@auth/core/providers/discord";
+// import Discord from "@auth/core/providers/discord";
 import type { DefaultSession } from "@auth/core/types";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 
 import { prisma } from "@acme/db";
 
-import { env } from "./env.mjs";
+// import { env } from "./env.mjs";
 
 export type { Session } from "next-auth";
 
@@ -28,10 +28,10 @@ export const {
 } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
-    Discord({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
+    // Discord({
+    //   clientId: env.DISCORD_CLIENT_ID,
+    //   clientSecret: env.DISCORD_CLIENT_SECRET,
+    // }),
   ],
   callbacks: {
     session: ({ session, user }) => ({
