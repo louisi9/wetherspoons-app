@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
+    provider = "sqlite"
     url      = env("DATABASE_URL")
 }
 
@@ -54,6 +54,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+
+    orders Order[]
 }
 
 model VerificationToken {
@@ -63,3 +65,67 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+model Product {
+    id String @id @default(cuid())
+
+    name String
+
+    /// In pennies.
+    price Int
+
+    categories ProductCategory[]
+
+    possibleMain Product[] @relation("possible-side-main")
+    possibleSide Product[] @relation("possible-side-main")
+
+    orders Order[]
+}
+
+model ProductCategory {
+    id String @id @default(cuid())
+
+    products Product[]
+
+    childCategories ProductCategory[] @relation("parent-child-category")
+
+    parentCategoryID String
+    parentCategory   ProductCategory @relation("parent-child-category", fields: [parentCategoryID], references: [id])
+}
+
+model Order {
+    id String @id @default(cuid())
+
+    orderItems Product[]
+
+    subtotal Int
+    total    Int
+
+    paid          Boolean
+    paymentMethod String?
+
+    userID String
+    user   User   @relation(fields: [userID], references: [id])
+
+    payment Payment[]
+}
+
+model Payment {
+    id String @id @default(cuid())
+
+    /// Will be enum below
+    method String
+
+    amountBeforeFees Int
+    amountAfterFees  Int
+
+    orderID String
+    order   Order  @relation(fields: [orderID], references: [id])
+}
+
+// enum PaymentMethod {
+//     stripe
+//     credit_card
+//     apple_pay
+//     google_pay
+// }

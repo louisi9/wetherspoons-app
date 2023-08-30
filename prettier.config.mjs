@@ -25,6 +25,8 @@ const config = {
   ],
   importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
   importOrderTypeScriptVersion: "4.4.0",
+  useTabs: true,
+  tabWidth: 4,
 };
 
 export default config;
